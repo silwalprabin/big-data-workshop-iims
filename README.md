@@ -33,12 +33,15 @@ See hadoop.env file
 **Start the Cluster**
 
 Run the following command to start all services:
-
+```
 docker-compose up -d
+```
 
 Verify that all services are running:
-
+```
 docker-compose ps
+```
+
 
 **Accessing Services**
 
@@ -52,7 +55,7 @@ docker-compose ps
 - **Cassandra**: <localhost:9042>
 
 **Verify realtime events**
-
+```
 docker exec -it kafka /bin/bash
 
 kafka-topics.sh --create --topic healthcare_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
@@ -60,11 +63,12 @@ kafka-topics.sh --create --topic healthcare_topic --bootstrap-server localhost:9
 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic healthcare_topic
 
 exit
-
+```
 
 **Stop realtime events**
+```
 docker stop kafka-producer
-
+```
 
 **Use Case: Healthcare Data Analysis**
 
