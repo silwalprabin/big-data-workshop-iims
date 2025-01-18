@@ -52,11 +52,15 @@ docker-compose ps
 - **Cassandra**: <localhost:9042>
 
 **Verify realtime events**
+
 docker exec -it kafka /bin/bash
+
 kafka-topics.sh --create --topic healthcare_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic healthcare_topic
+
 exit
+
 
 **Stop realtime events**
 docker stop kafka-producer
@@ -98,25 +102,39 @@ Cassandra stores healthcare data (e.g., patient records, lab results).
 **Steps to Run Spark Job**
 
 1. Copy the data to HDFS:
+
 docker cp healthcare_data.csv namenode:/
+
 docker exec -it namenode bash
+
 hadoop fs -mkdir -p /data
+
 hadoop fs -put /healthcare_data.csv /data
+
 exit
+
+
 2. Submit the Spark job:
+
 docker cp spark_job.py spark-master:/
+
 docker cp spark_stream.py spark-master:/
 
 docker exec -it cassandra cqlsh
+
 CREATE KEYSPACE healthcare WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
 USE healthcare;
+
 CREATE TABLE disease_stats (
     disease text PRIMARY KEY,
     count int
 );
+
 exit
 
 docker exec -it spark-master bash
+
 pip3 install cassandra-driver
 
 TEST:: (/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077)
@@ -133,25 +151,36 @@ TEST:: (/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spa
 exit
 
 # Verify Data in Cassandra
+
 docker exec -it cassandra cqlsh
+
 USE healthcare;
+
 SELECT * FROM disease_stats;
+
 exit
 
 # Verify Data in Elasticsearch
+
 curl -X GET "http://localhost:9200/healthcare-disease-stats/_search?pretty"
 
 
 RUN:
+
 **Start realtime events**
+
 docker start kafka-producer
 
 **Verify realtime events**
+
 docker exec -it kafka /bin/bash
+
 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic healthcare_topic --from-beginning
+
 exit
 
 docker exec -it spark-master bash
+
 /spark/bin/spark-submit --master spark://spark-master:7077 --packages org.apache.spark:spark-sql_2.12:3.4.0,com.datastax.spark:spark-cassandra-connector_2.12:3.4.0,org.elasticsearch:elasticsearch-spark-30_2.12:8.10.2,com.github.jnr:jnr-posix:3.1.15,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 /spark_stream.py
 
 exit
@@ -167,7 +196,9 @@ exit
 **Troubleshooting**
 
 - Check logs for any service:
-- docker-compose logs <service\_name>
+
+- docker-compose logs <container_name>
+
 - Verify resource allocation for Docker.
 
 
@@ -180,11 +211,15 @@ See iot-stream-flink.py file:
 **Query Processed Data with Presto:**
 
 Use case id to access the Presto UI at http://localhost:8083 and run SQL queries like:
+
 Eg: SELECT disease, count FROM healthcare.disease_stats;
 
 We can configure Presto to connect with:
+
 - Cassandra: To query structured data.
+
 - HDFS: For querying large-scale, distributed data.
+
 - Elasticsearch: To query indexed healthcare data.
 
 
