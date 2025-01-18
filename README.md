@@ -102,7 +102,7 @@ Cassandra stores healthcare data (e.g., patient records, lab results).
 **Steps to Run Spark Job**
 
 1. Copy the data to HDFS:
-
+```Docker
 docker cp healthcare_data.csv namenode:/
 
 docker exec -it namenode bash
@@ -112,7 +112,7 @@ hadoop fs -mkdir -p /data
 hadoop fs -put /healthcare_data.csv /data
 
 exit
-
+```
 
 2. Submit the Spark job:
 
