@@ -1,0 +1,220 @@
+version: '3.8'
+
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    restart: always
+    ports:
+      - 9870:9870
+      - 9000:9000
+    volumes:
+      - namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bigdata-net
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    restart: always
+    volumes:
+      - datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bigdata-net
+
+  spark-master:
+    image: bde2020/spark-master:latest
+    container_name: spark-master
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+    ports:
+      - "8080:8080"  # Spark UI
+      - "7077:7077"  # Spark cluster port
+    networks:
+      - bigdata-net
+
+  spark-worker:
+    image: bde2020/spark-worker:latest
+    container_name: spark-worker
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    networks:
+      - bigdata-net
+
+  # kafka:
+  #   image: wurstmeister/kafka:latest
+  #   container_name: kafka
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     - KAFKA_ADVERTISED_HOST_NAME=localhost
+  #     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+  #   networks:
+  #     - bigdata-net
+  
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9093:9093"  # External port
+      - "9092:9092"  # Internal port
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=localhost
+      # Advertised listeners (for both internal and external)
+      - KAFKA_ADVERTISED_LISTENERS=INSIDE://localhost:9092,EXTERNAL://kafka:9093
+      # Define the security protocol map
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,EXTERNAL:PLAINTEXT
+      # Listeners (internal and external, with correct security protocol)
+      - KAFKA_LISTENERS=INSIDE://0.0.0.0:9092,EXTERNAL://0.0.0.0:9093
+      # Define the listener names
+      - KAFKA_LISTENER_NAME_INSIDE=INSIDE
+      - KAFKA_LISTENER_NAME_EXTERNAL=EXTERNAL
+      # Security protocol for listeners
+      - KAFKA_LISTENER_SECURITY_PROTOCOL=PLAINTEXT
+      - KAFKA_LISTENER_INTERNAL_SECURITY_PROTOCOL=PLAINTEXT
+      - KAFKA_LISTENER_EXTERNAL_SECURITY_PROTOCOL=PLAINTEXT
+      # Zookeeper connection settings
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      # Set the inter-broker listener name to INSIDE (or EXTERNAL if needed)
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+      - KAFKA_BROKER_ID=0
+    networks:
+      - bigdata-net
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - bigdata-net
+
+  kafka-producer:
+    build:
+      context: kafka-producer
+      dockerfile: Dockerfile
+    container_name: kafka-producer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9093
+    networks:
+      - bigdata-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false  # Disable security to allow HTTP traffic
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - bigdata-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.4.3
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - bigdata-net
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    hostname: cassandra-node1
+    ports:
+      - "9042:9042"
+    networks:
+      - bigdata-net
+    environment:
+      - CASSANDRA_CLUSTER_NAME=BigDataCluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+      - JVM_OPTS=-Xms512M -Xmx512M
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE CLUSTER' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  presto:
+    image: trinodb/trino:latest
+    container_name: presto
+    ports:
+      - "8083:8080"
+    networks:
+      - bigdata-net
+    depends_on:
+      - cassandra
+      - namenode
+      - elasticsearch
+    volumes:
+      - ./presto-config:/etc/presto
+
+  flink-jobmanager:
+    # image: flink:1.15.4
+    build:
+        context: ./flink-python
+        dockerfile: Dockerfile
+    container_name: flink-jobmanager
+    ports:
+      - "8082:8081"
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+    command: jobmanager
+    networks:
+      - bigdata-net
+
+  flink-taskmanager:
+    # image: flink:1.15.4
+    build:
+      context: ./flink-python
+      dockerfile: Dockerfile
+    container_name: flink-taskmanager
+    depends_on:
+      - flink-jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+    command: taskmanager
+    networks:
+      - bigdata-net
+
+volumes:
+  cassandra-data:
+  namenode:
+  datanode:
+
+networks:
+  bigdata-net:
+    driver: bridge

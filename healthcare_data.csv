@@ -1,0 +1,101 @@
+patient_id,age,gender,disease,treatment_cost,hospital_name
+1,76,Male,Pneumonia,1782.79,Greenfield Healthcare
+2,22,Male,Hypertension,3910.37,Lakeside Medical Center
+3,62,Female,Asthma,1836.62,Lakeside Medical Center
+4,64,Male,Pneumonia,9451.53,Mountain View Clinic
+5,88,Female,Asthma,4485.3,Mountain View Clinic
+6,66,Male,Asthma,1240.3,Lakeside Medical Center
+7,31,Female,Cancer,4039.86,Mountain View Clinic
+8,29,Female,Hypertension,9293.75,Mountain View Clinic
+9,80,Female,Cancer,7431.39,Mountain View Clinic
+10,70,Female,Pneumonia,1261.3,Lakeside Medical Center
+11,60,Female,Pneumonia,6639.55,City Hospital
+12,31,Male,Diabetes,5722.94,Mountain View Clinic
+13,90,Male,Hypertension,8064.36,Sunrise Hospital
+14,60,Male,Pneumonia,8775.34,Mountain View Clinic
+15,30,Male,Asthma,2244.6,Sunrise Hospital
+16,72,Male,Diabetes,9590.49,Lakeside Medical Center
+17,28,Male,Hypertension,1622.15,Sunrise Hospital
+18,18,Female,Pneumonia,7502.2,Greenfield Healthcare
+19,72,Male,Pneumonia,8051.68,Mountain View Clinic
+20,32,Male,Asthma,8749.4,Greenfield Healthcare
+21,76,Female,Diabetes,4961.63,Greenfield Healthcare
+22,83,Male,Diabetes,5871.18,Mountain View Clinic
+23,28,Female,Diabetes,5206.05,Mountain View Clinic
+24,33,Female,Cancer,5299.52,City Hospital
+25,80,Female,Diabetes,6007.87,City Hospital
+26,69,Female,Diabetes,7443.98,Greenfield Healthcare
+27,59,Male,Pneumonia,4792.43,Sunrise Hospital
+28,88,Male,Hypertension,5258.22,Greenfield Healthcare
+29,66,Female,Pneumonia,9371.66,Mountain View Clinic
+30,82,Female,Asthma,4463.44,Greenfield Healthcare
+31,36,Female,Cancer,9802.88,Mountain View Clinic
+32,48,Female,Asthma,7099.87,City Hospital
+33,75,Male,Hypertension,9569.49,Mountain View Clinic
+34,51,Male,Asthma,6523.68,Sunrise Hospital
+35,64,Female,Asthma,1925.51,Mountain View Clinic
+36,38,Female,Asthma,1337.82,City Hospital
+37,68,Female,Pneumonia,5645.57,Greenfield Healthcare
+38,49,Female,Pneumonia,9970.76,Lakeside Medical Center
+39,75,Female,Cancer,1154.72,Greenfield Healthcare
+40,78,Male,Diabetes,8052.93,Sunrise Hospital
+41,54,Female,Diabetes,6160.54,Lakeside Medical Center
+42,41,Male,Hypertension,3199.48,Mountain View Clinic
+43,38,Female,Diabetes,9808.42,Lakeside Medical Center
+44,34,Male,Pneumonia,1737.93,Sunrise Hospital
+45,24,Female,Cancer,6526.81,Mountain View Clinic
+46,66,Male,Pneumonia,4787.92,Mountain View Clinic
+47,20,Female,Pneumonia,3012.4,Mountain View Clinic
+48,56,Female,Asthma,6130.69,Lakeside Medical Center
+49,37,Male,Asthma,2868.3,Greenfield Healthcare
+50,26,Female,Asthma,8095.76,Lakeside Medical Center
+51,43,Male,Cancer,8639.2,Greenfield Healthcare
+52,36,Male,Asthma,6779.74,Greenfield Healthcare
+53,36,Female,Asthma,7551.58,City Hospital
+54,85,Female,Hypertension,9574.15,City Hospital
+55,62,Female,Asthma,2320.29,Lakeside Medical Center
+56,36,Female,Diabetes,8449.93,City Hospital
+57,79,Male,Asthma,7410.29,Mountain View Clinic
+58,74,Female,Cancer,1782.99,Sunrise Hospital
+59,48,Female,Pneumonia,4754.49,Sunrise Hospital
+60,62,Male,Diabetes,9980.91,Sunrise Hospital
+61,75,Female,Diabetes,4670.17,Mountain View Clinic
+62,35,Female,Pneumonia,7691.7,Sunrise Hospital
+63,56,Male,Diabetes,8028.03,Lakeside Medical Center
+64,45,Male,Cancer,2656.22,Lakeside Medical Center
+65,82,Female,Hypertension,2741.99,Lakeside Medical Center
+66,52,Female,Asthma,6051.29,Lakeside Medical Center
+67,57,Male,Hypertension,3162.08,Mountain View Clinic
+68,22,Male,Asthma,7728.35,Lakeside Medical Center
+69,27,Male,Asthma,7128.95,City Hospital
+70,45,Male,Pneumonia,2752.54,Greenfield Healthcare
+71,28,Male,Diabetes,8254.48,Greenfield Healthcare
+72,24,Male,Pneumonia,9390.05,City Hospital
+73,22,Female,Hypertension,4872.49,Lakeside Medical Center
+74,49,Male,Asthma,3824.32,Mountain View Clinic
+75,50,Female,Hypertension,5034.63,Lakeside Medical Center
+76,64,Female,Asthma,7305.5,City Hospital
+77,67,Female,Hypertension,8295.1,City Hospital
+78,77,Male,Diabetes,7389.38,Sunrise Hospital
+79,47,Female,Diabetes,3005.01,Sunrise Hospital
+80,40,Male,Hypertension,4233.03,City Hospital
+81,74,Female,Cancer,8603.12,Greenfield Healthcare
+82,28,Male,Cancer,4114.41,City Hospital
+83,55,Female,Diabetes,8577.63,Sunrise Hospital
+84,55,Female,Diabetes,8183.03,Mountain View Clinic
+85,90,Female,Diabetes,3365.45,Lakeside Medical Center
+86,41,Male,Cancer,3173.19,City Hospital
+87,20,Male,Hypertension,3011.01,Sunrise Hospital
+88,26,Female,Cancer,2032.31,Lakeside Medical Center
+89,75,Male,Cancer,6233.94,Sunrise Hospital
+90,62,Female,Cancer,7966.44,City Hospital
+91,71,Male,Pneumonia,9202.33,Greenfield Healthcare
+92,67,Female,Diabetes,7225.78,Greenfield Healthcare
+93,53,Female,Diabetes,8088.91,City Hospital
+94,28,Female,Asthma,4840.54,Lakeside Medical Center
+95,89,Male,Diabetes,8485.23,Lakeside Medical Center
+96,69,Male,Diabetes,3051.84,City Hospital
+97,82,Male,Diabetes,6138.54,Mountain View Clinic
+98,77,Female,Hypertension,1552.69,Lakeside Medical Center
+99,90,Female,Hypertension,1004.36,City Hospital
+100,66,Female,Pneumonia,1465.33,Greenfield Healthcare
