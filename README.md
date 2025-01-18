@@ -102,6 +102,7 @@ Cassandra stores healthcare data (e.g., patient records, lab results).
 **Steps to Run Spark Job**
 
 1. Copy the data to HDFS:
+
 ```Docker
 docker cp healthcare_data.csv namenode:/
 
@@ -116,6 +117,7 @@ exit
 
 2. Submit the Spark job:
 
+```
 docker cp spark_job.py spark-master:/
 
 docker cp spark_stream.py spark-master:/
@@ -132,7 +134,9 @@ CREATE TABLE disease_stats (
 );
 
 exit
+```
 
+```
 docker exec -it spark-master bash
 
 pip3 install cassandra-driver
@@ -149,9 +153,10 @@ TEST:: (/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spa
   spark_job.py
 
 exit
+```
 
 # Verify Data in Cassandra
-
+```
 docker exec -it cassandra cqlsh
 
 USE healthcare;
@@ -159,31 +164,35 @@ USE healthcare;
 SELECT * FROM disease_stats;
 
 exit
+```
 
 # Verify Data in Elasticsearch
-
+```
 curl -X GET "http://localhost:9200/healthcare-disease-stats/_search?pretty"
-
+```
 
 RUN:
 
 **Start realtime events**
-
+```
 docker start kafka-producer
-
+```
 **Verify realtime events**
-
+```
 docker exec -it kafka /bin/bash
 
 kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic healthcare_topic --from-beginning
 
 exit
+```
 
+```
 docker exec -it spark-master bash
 
 /spark/bin/spark-submit --master spark://spark-master:7077 --packages org.apache.spark:spark-sql_2.12:3.4.0,com.datastax.spark:spark-cassandra-connector_2.12:3.4.0,org.elasticsearch:elasticsearch-spark-30_2.12:8.10.2,com.github.jnr:jnr-posix:3.1.15,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 /spark_stream.py
 
 exit
+```
 
 **Data Visualization with Kibana**
 
