@@ -11,7 +11,7 @@ This repository demonstrates a real-world big data analytics workflow using Dock
 
 **Clone the Repository**
 
-git clone https://github.com/your-repo/bigdata-analytics
+git clone https://github.com/silwalprabin/big-data-workshop-iims
 
 cd bigdata-analytics
 
