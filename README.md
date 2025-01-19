@@ -56,6 +56,10 @@ docker-compose ps
 
 **Verify realtime events**
 ```
+docker stop kafka-producer
+
+docker start kafka-producer
+
 docker exec -it kafka /bin/bash
 
 kafka-topics.sh --create --topic healthcare_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
