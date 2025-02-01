@@ -19,4 +19,4 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
 # install PyFlink
-RUN pip3 install apache-flink==1.15.4 apache-flink==1.17.0  apache-flink-kafka
+# RUN pip3 install apache-flink==1.15.4 apache-flink==1.17.0  apache-flink-kafka
