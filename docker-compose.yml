@@ -112,24 +112,26 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9093
     networks:
       - bigdata-net
-
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false  # Disable security to allow HTTP traffic
+      - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     networks:
       - bigdata-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
-      interval: 10s
-      timeout: 10s
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 5s
       retries: 5
+
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.4.3
@@ -214,6 +216,7 @@ volumes:
   cassandra-data:
   namenode:
   datanode:
+  esdata:
 
 networks:
   bigdata-net:
