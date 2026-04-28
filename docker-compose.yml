@@ -3,6 +3,7 @@ version: '3.8'
 services:
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    platform: linux/amd64
     container_name: namenode
     restart: always
     ports:
@@ -19,6 +20,7 @@ services:
 
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    platform: linux/amd64
     container_name: datanode
     restart: always
     volumes:
@@ -32,6 +34,7 @@ services:
 
   spark-master:
     image: bde2020/spark-master:latest
+    platform: linux/amd64
     container_name: spark-master
     environment:
       - INIT_DAEMON_STEP=setup_spark
@@ -43,6 +46,7 @@ services:
 
   spark-worker:
     image: bde2020/spark-worker:latest
+    platform: linux/amd64
     container_name: spark-worker
     environment:
       - SPARK_MASTER=spark://spark-master:7077
@@ -66,6 +70,7 @@ services:
   
   kafka:
     image: wurstmeister/kafka:latest
+    platform: linux/amd64
     container_name: kafka
     ports:
       - "9093:9093"  # External port
@@ -95,6 +100,7 @@ services:
 
   zookeeper:
     image: wurstmeister/zookeeper
+    platform: linux/amd64
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -114,6 +120,7 @@ services:
       - bigdata-net
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    platform: linux/amd64
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -135,6 +142,7 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.4.3
+    platform: linux/amd64
     container_name: kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
@@ -148,6 +156,7 @@ services:
 
   cassandra:
     image: cassandra:4.1
+    platform: linux/amd64
     container_name: cassandra
     hostname: cassandra-node1
     ports:
@@ -172,6 +181,7 @@ services:
 
   presto:
     image: trinodb/trino:latest
+    platform: linux/amd64
     container_name: presto
     ports:
       - "8083:8080"
